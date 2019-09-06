@@ -1,1 +1,1 @@
-16S from gut samples
+Rarefied table. 16S from gut samples
