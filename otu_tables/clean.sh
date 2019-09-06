@@ -5,5 +5,9 @@ then
 else
 	INPUT=$1
 fi
-usearch -otutab_xtalk $INPUT -otutabout otutab_denoised.tsv  \
-  -report xtalk_summary.txt -htmlout xtalk_view.html
+
+DIR=$(dirname $INPUT)
+usearch -otutab_xtalk "$INPUT" -otutabout $DIR/otutab_denoised.tsv  \
+  -report $DIR/xtalk_summary.txt -htmlout $DIR/xtalk_view.html
+
+usearch -otutab_stats "$INPUT" -output $DIR/otutab.stats.txt
