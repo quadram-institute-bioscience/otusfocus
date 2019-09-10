@@ -1,1 +1,0 @@
-Mixed samples (gut / skin)
