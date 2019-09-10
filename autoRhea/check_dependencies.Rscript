@@ -1,5 +1,5 @@
 #!/usr/bin/env Rscript
-packages <-c("ade4","GUniFrac","phangorn","cluster","microbiome","metagenomeSeq",
+packages <-c("ade4","GUniFrac","phangorn","cluster","microbiome",
              "fpc","compare","plotrix","PerformanceAnalytics","reshape","ggplot2","gridExtra","grid","ggrepel",
              "gtable","Matrix","cowplot", "Hmisc","corrplot","muStat")
 
