@@ -42,8 +42,15 @@ rawOtuTable = pandas.read_csv(opt.otutable, sep='\t', index_col=0)
 
 
 
+cleaned_otus = 0
 for index, row in rawOtuTable.iterrows():
     #print('<<<{}>>> {}'.format(index, row))
-    xrow = denoisedTable.loc[index, :]
-    diff = row - xrow
-    print(row, xrow)
+    cleaned_cells = 0
+    cleaned_row = denoisedTable.loc[index, :]
+    diff = row - cleaned_row
+    for i, value in row.items():
+        if cleaned_row[i] != value:
+            cleaned_cells += 1
+
+    if cleaned_cells > 0:
+        print('{}\t{}\t{}'.format(index, cleaned_cells, row.max()))
