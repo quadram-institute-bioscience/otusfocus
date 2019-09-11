@@ -10,10 +10,10 @@ input_file = args[1]
 output_dir = args[2]
 
 if (dir.exists(output_dir) ) {
-  cat("Directory found\n")
+  cat(" - Directory found\n")
 }
 if (file.exists(input_file)){
-  cat("Otutab file found\n")
+  cat(" - Otutab file found\n")
 }
 
 #' Version 2.0
@@ -66,7 +66,7 @@ file_name <- input_file                      #<--- CHANGE ACCORDINGLY
 
 #' Please set the directory of the script as the working folder (e.g D:/studyname/NGS-Data/Rhea/normalize/)
 #' Note: the path is denoted by forward slash "/"
-file.path(output_dir)
+#file.path(output_dir)
 
 #' Please select the normalisation method
 #' 0 = No random subsampling, no rounding
@@ -98,7 +98,7 @@ InsPack <- function(pack)
 }
 
 # Applying the installation on the list of packages
-lapply(packages, InsPack)
+silent <- lapply(packages, InsPack)
 
 # Make the libraries
 lib <- lapply(packages, require, character.only = TRUE)
@@ -117,6 +117,7 @@ otu_table <-  read.table (file_name,
                           row.names = 1,
                           comment.char = "")
 
+cat(" - Loaded OTU table: ", file_name, "\n")
 
 # Clean table from empty lines
 otu_table <- otu_table[!apply(is.na(otu_table) | otu_table=="",1,all),]
@@ -132,6 +133,8 @@ otu_table$taxonomy <- NULL
 
 # Calculate the minimum sum of all columns/samples
 min_sum <- min(colSums(otu_table))
+
+#TODO
 
 if (method == 0) {
   # Divide each value by the sum of the sample and multiply by the minimal sample sum
@@ -159,7 +162,7 @@ setwd(file.path(output_dir)) #<--- CHANGE ACCORDINGLY
 ################################################################################
 # Generate a twosided pdf with a rarefaction curve for all samples and a curve
 
-pdf(file = "RarefactionCurve.pdf")
+outplot <- pdf(file = "RarefactionCurve.pdf")
 
 # Plot the rarefaction curve for all samples
 rarefactionCurve <- rarecurve(data.frame(t(otu_table)),
