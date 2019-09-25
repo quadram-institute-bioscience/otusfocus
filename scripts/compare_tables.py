@@ -43,7 +43,9 @@ rawOtuTable = pandas.read_csv(opt.otutable, sep='\t', index_col=0)
 
 
 cleaned_otus = 0
+row_index = 0
 for index, row in rawOtuTable.iterrows():
+    row_index += 1
     #print('<<<{}>>> {}'.format(index, row))
     cleaned_cells = 0
     cleaned_row = denoisedTable.loc[index, :]
@@ -53,4 +55,4 @@ for index, row in rawOtuTable.iterrows():
             cleaned_cells += 1
 
     if cleaned_cells > 0:
-        print('{}\t{}\t{}'.format(index, cleaned_cells, row.max()))
+        print('{}|{}\tdenoised_cells={}\tmax={}\t{}'.format(row_index,index, cleaned_cells, row.max()))
