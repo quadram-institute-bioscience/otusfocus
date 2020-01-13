@@ -26,7 +26,7 @@ bibliography: paper.bib
 
 # Summary
 
-Illumina sequencing is the most widely adopted technology to perform metabarcoding experiments (e.g. [@protocol]). 
+Illumina sequencing is the most widely adopted technology to perform metabarcoding experiments (e.g. @protocol). 
 In a typical metabarcoding experiment more than one hundred samples are multiplexed and run in the same sequencing experiment,
 and due to the nature of the experiment it is expected to find the same sequence in multiple samples. 
 
