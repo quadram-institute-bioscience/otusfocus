@@ -18,13 +18,13 @@ def vprint(msg):
 
 opt_parser = argparse.ArgumentParser(description='"samtools depth" to bed')
 
-opt_parser.add_argument('-t', '--otutable',
+opt_parser.add_argument('otutable',
                         help='Input OTU table',
-                        required=True)
-opt_parser.add_argument('-d', '--denoisedtable',
+                        )
+opt_parser.add_argument('denoisedtable',
                         type=argparse.FileType('r'),
                         help='Output (denoised) OTU table',
-                        required=True)
+                        )
 
 opt_parser.add_argument('-k', '--key',
                         help='OTU ID in the OTU table [#OTU ID]',
@@ -46,7 +46,7 @@ cleaned_otus = 0
 row_index = 0
 for index, row in rawOtuTable.iterrows():
     row_index += 1
-    #print('<<<{}>>> {}'.format(index, row))
+    vprint('<<<{}>>> {}'.format(index, row))
     cleaned_cells = 0
     cleaned_row = denoisedTable.loc[index, :]
     diff = row - cleaned_row
@@ -55,4 +55,4 @@ for index, row in rawOtuTable.iterrows():
             cleaned_cells += 1
 
     if cleaned_cells > 0:
-        print('{}|{}\tdenoised_cells={}\tmax={}\t{}'.format(row_index,index, cleaned_cells, row.max()))
+        print('{}|{}\tdenoised_cells={}\tmax={}'.format(row_index,index, cleaned_cells, row.max()))

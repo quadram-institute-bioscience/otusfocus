@@ -2,12 +2,15 @@
 # coding: utf-8
 
 import sys
+import numpy
 import pandas
 import argparse
 import statistics
 import math
+
 # Program defaults
 from typing import Any
+
 
 threshold_ratio = 0.1
 min_low_samples = 3
@@ -30,12 +33,16 @@ def debug(message):
     if opt.debug:
         eprint('#{}'.format(message))
 
+
 opt_parser = argparse.ArgumentParser(description='Denoise Illumina cross-talk from OTU tables')
 
 opt_parser.add_argument('-i', '--input',
                         help='OTU table filename',
                         required=True)
 
+opt_parser.add_argument('-o', '--output',
+                        help='Cleaned OTU table filename',
+                        )
 opt_parser.add_argument('-v', '--verbose',
                         help='Print extra information',
                         action='store_true')
@@ -48,6 +55,7 @@ opt_parser.add_argument('-d', '--debug',
 
 opt = opt_parser.parse_args()
 
+
 # Import OTU table in "Qiime Classic format"
 try:
     data = pandas.read_csv(opt.input, sep='\t', header=0, index_col=0)
@@ -55,7 +63,8 @@ except Exception as e:
     eprint("FATAL ERROR: Unable to open {}. {}".format(opt.input, e))
     exit(1)
 
-(tot_otus, tot_samples) = data.shape
+tot_otus, tot_samples = data.shape
+
 verbose(' - Total OTUs: {}\n - Total samples: {}'.format(tot_otus, tot_samples))
 
 if tot_samples * min_sample_ratio > min_low_samples:
@@ -69,17 +78,48 @@ candidates_df = pandas.DataFrame(columns=data.columns)
 cross_talk_indices = []
 
 verbose(' - Scanning OTU table to estimate cross talk index')
+
+
+
+otu_means = data.mean(axis=1)
+low_cells = (0 < data) & data.le(threshold_ratio * otu_means, axis=0)
+num_samples_low = low_cells.sum(axis=1)
+tot_samples_low = (data * low_cells).sum(axis=1)
+row_tot = data.sum(axis=1)
+
+cross_index = (tot_samples_low / row_tot ) * ( tot_samples / tot_samples_low )
+candidates = (tot_samples_low > min_low_samples) & (row_tot > min_otu_counts) & (cross_index <= max_cross_index)
+if candidates.sum() < min_candidates:
+    eprint('Not enough OTU candidates to estimate cross talk')
+    exit(1)
+
+cross_talk_median = cross_index.loc[candidates].median()
+
+eprint('Median cross talk: {}'.format(cross_talk_median))
+
+Zi = cross_talk_median * row_tot/data.shape[1]
+t = 2/(1 + numpy.exp(data.divide(Zi, axis=0)))
+
+denoised_data = data.where(t < threshold_ratio, 0)
+
+if opt.output is None:
+    opt.output = opt.input + '.cleaned'
+
+denoised_data.to_csv(opt.input + '.cleaned' if opt.output is None else opt.output, sep='\t')
+
+exit()
+
 for index, row in data.iterrows():
 
     otu_mean = row.mean()
     otu_max  = row.max()
 
-    num_samples_low = 0
-    tot_samples_low = 0
-    for cell in row:
-        if 0 < cell <= (threshold_ratio * otu_mean):
-            num_samples_low += 1
-            tot_samples_low += cell
+
+
+    low_cells = (0 < row) & (row <= threshold_ratio * otu_mean)
+    num_samples_low = low_cells.sum()
+    tot_samples_low = row.loc[low_cells].sum()
+
     if tot_samples_low > min_low_samples and row.sum() > min_otu_counts:
         candidates += 1
         cross_index = (tot_samples_low / row.sum() ) * ( tot_samples / tot_samples_low )

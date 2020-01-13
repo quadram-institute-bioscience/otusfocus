@@ -1,0 +1,36 @@
+*1 1600128: thr=0.0 lowsamples=0.5 minsampleratio=0.05 maxcross=0.01
+denoise_dev_function.py:41: RuntimeWarning: overflow encountered in exp
+  t = 2 / (1 + numpy.exp(data.divide(Zi, axis=0)))
+<26951 1073080: thr=0.05 lowsamples=0.5 minsampleratio=0.05 maxcross=0.01
+<26952 1028584: thr=0.05 lowsamples=0.5 minsampleratio=0.05 maxcross=0.02
+
+
+
+
+---
+python denoise_dev_function.py -i ../otu_tables/example2/otutab.tsv -r ../otu_tables/example2/otutab_denoised.tsv
+
+*1 2843800863: thr=0.0 lowsamples=1.0 minsampleratio=0.05 maxcross=0.1denoise_dev_function.py:41: RuntimeWarning: overflow encountered in exp  t = 2 / (1 + numpy.exp(data.divide(Zi, axis=0)))
+<101 2347116464: thr=0.2 lowsamples=1.0 minsampleratio=0.05 maxcross=0.1
+---
+python denoise_dev_function.py -i ../otu_tables/example1/otutab.tsv -r ../otu_tables/example1/otutab_denoised.tsv
+*1 205637760: thr=0.0 lowsamples=1.0 minsampleratio=0.05 maxcross=0.1
+denoise_dev_function.py:41: RuntimeWarning: overflow encountered in exp
+  t = 2 / (1 + numpy.exp(data.divide(Zi, axis=0)))
+<101 170100730: thr=0.2 lowsamples=1.0 minsampleratio=0.05 maxcross=0.1
+--
+python denoise_dev_function.py -i ../otu_tables/example3/otutab.tsv -r ../otu_tables/example3/otutab_denoised.tsv
+*1 1600128: thr=0.0 lowsamples=1.0 minsampleratio=0.05 maxcross=0.1
+denoise_dev_function.py:41: RuntimeWarning: overflow encountered in exp
+  t = 2 / (1 + numpy.exp(data.divide(Zi, axis=0)))
+<101 1357085: thr=0.2 lowsamples=1.0 minsampleratio=0.05 maxcross=0.1
+--
+python denoise_dev_function.py -i ../otu_tables/example3/otutab.tsv -r ../otu_tables/example3/otutab_denoised.tsv
+*1 1600128: thr=0.0 lowsamples=1.0 minsampleratio=0.01 maxcross=0.1
+denoise_dev_function.py:41: RuntimeWarning: overflow encountered in exp
+  t = 2 / (1 + numpy.exp(data.divide(Zi, axis=0)))
+<769 1147681: thr=0.1 lowsamples=1.0 minsampleratio=0.01 maxcross=0.1
+
+--
+python denoise_dev_function.py -i ../otu_tables/example1/otutab.tsv -r ../otu_tables/example1/otutab_denoised.tsv
+*1 205637760: thr=0.0 lowsamples=1.0 minsampleratio=0.01 maxcross=0.1denoise_dev_function.py:41: RuntimeWarning: overflow encountered in exp  t = 2 / (1 + numpy.exp(data.divide(Zi, axis=0)))<769 156066822: thr=0.1 lowsamples=1.0 minsampleratio=0.01 maxcross=0.1
