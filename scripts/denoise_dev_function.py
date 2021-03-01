@@ -1,6 +1,10 @@
 #!/usr/bin/env python
 # coding: utf-8
 
+# Example command:
+# python3 /local/giovanni/otusfocus/scripts/denoise_dev_function.py -i /local/giovanni/otusfocus/otu_tables/example3/otutab.tsv
+# /local/giovanni/otusfocus/scripts/denoise_dev_function.py -i /local/giovanni/otusfocus/otu_tables/example3/otutab.tsv
+
 import sys
 import numpy
 import pandas
@@ -10,7 +14,7 @@ from scipy.optimize import minimize
 # Program defaults
 from typing import Any
 
-def denoiseTable(data, threshold_ratio = 0.1, min_low_samples = 3, min_sample_ratio = 0.15, min_otu_counts  = 1000, min_candidates  = 10, max_cross_index = 0.02):
+def denoiseTable(data, threshold_ratio = 0.04, min_low_samples = 3, min_sample_ratio = 0.15, min_otu_counts  = 1000, min_candidates  = 9, max_cross_index = 0.01):
     """
     Denoise an OTU table
     Parameters: OTU Table, threshold_ratio = 0.1, min_low_samples = 3, min_sample_ratio = 0.15, min_otu_counts  = 1000, min_candidates  = 10, max_cross_index     = 0.02
@@ -42,14 +46,27 @@ def denoiseTable(data, threshold_ratio = 0.1, min_low_samples = 3, min_sample_ra
 
     verbose('Median cross talk: {}'.format(cross_talk_median))
 
+    #all counts ≤ z(i) are crosstalk: set them to zero
     Zi = cross_talk_median * row_tot / data.shape[1]
 
-    t = 0
-    if data.divide(Zi, axis=0) < 100:
-        t = 2 / (1 + numpy.exp(data.divide(Zi, axis=0)))
+    # 't' series
+
+    dividedData = data.divide(Zi, axis=0)
+    t = 2 / (1 + numpy.exp(dividedData.clip(upper=100)))
+
+
+    #if False:
+    #    t = 0
+    #    if data.divide(Zi, axis=0) < 100:
+    #        t = 2 / (1 + numpy.exp(data.divide(Zi, axis=0)))
 
     denoised_data = data.where(t < threshold_ratio, 0)
 
+    #from IPython import embed
+    #embed()
+    #assert False
+    data.loc[(data - denoised_data > 0).any(axis=1)]
+    
     if opt.output is None:
         opt.output = opt.input + '.cleaned'
 
