@@ -1,6 +1,11 @@
 # Dadaist2
 
-This script was integrated in [**Dadaist2**](https://quadram-institute-bioscience.github.io/dadaist2).
+_OtusFocus_ was integrated in [**Dadaist2**](https://quadram-institute-bioscience.github.io/dadaist2).
+
+```
+github.com/quadram-institute-bioscience/dadaist2
+```
+This repository is now archived and no longer maintained.
 
 
 
