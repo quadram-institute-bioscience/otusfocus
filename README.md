@@ -1,5 +1,7 @@
 # Dadaist2
 
+![Archived](https://img.shields.io/badge/status-archived-red)
+
 _OtusFocus_ was integrated in [**Dadaist2**](https://quadram-institute-bioscience.github.io/dadaist2).
 
 ```
